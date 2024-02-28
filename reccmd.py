@@ -14,6 +14,9 @@ def record():
         sys.exit(255)
 
     result = subprocess.run(argv, capture_output=True, text=True)
+
+    # Allow variation in the path to the command
+    argv[0] = os.path.basename(argv[0])
     with open(FILE_NAME, "a") as f:
         json.dump(
             {
@@ -38,7 +41,7 @@ def play():
                 print("error: no recorded output for command", file=sys.stderr)
                 sys.exit(255)
     except FileNotFoundError as e:
-        print("error: no recorded commands in directory", file=sys.stderr)
+        print(f"error: no recorded commands in directory: {os.getcwd()}", file=sys.stderr)
         sys.exit(255)
 
     sys.stdout.write(cmd["stdout"])
